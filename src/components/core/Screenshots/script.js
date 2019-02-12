@@ -20,12 +20,16 @@ function addScreenshot(viewName, screenshot) {
 // ----------------------------------------------------------------------------
 
 function deleteScreenshot(viewName, index) {
-  if (this.screenshots[viewName]) {
-    this.screenshots[viewName].splice(index, 1);
-  }
+  // Ugly hack to let vuetify finish ripple animations before delete, otherwise
+  // the DOM will disappear before ripple animation callback finishes.
+  setTimeout(() => {
+    if (this.screenshots[viewName]) {
+      this.screenshots[viewName].splice(index, 1);
+    }
 
-  const totalCount = this.getTotalCount();
-  this.$emit('screenshot-count', totalCount);
+    const totalCount = this.getTotalCount();
+    this.$emit('screenshot-count', totalCount);
+  }, 0);
 }
 
 // ----------------------------------------------------------------------------
